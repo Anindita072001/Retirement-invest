@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+
+
+        body {
+            margin: 0;
+            font-family: 'Lora', serif !important;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #container {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        #main {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        #sidebar {
+
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px;
+            /* border-bottom: 1px solid #ddd; */
+            text-align: center;
+        }
+
+        @media (max-width: 767px) {
+            #sidebar {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            #sidebar a {
+                border-bottom: none;
+            }
+        }
+
+        .card {
+            border: none !important;
+        }
+
+        .cardImg {
+            border-radius: 100% !important;
+            height: 73px;
+            width: 73px;
+        }
+
+        .FirstCol {
+            padding: 18px 28px 5px 41px;
+        }
+
+        .FirstCol1 {
+            padding: 0px 18px;
+        }
+
+        .button1 {
+            background-color: #4935FF !important;
+        }
+
+        .button1>svg {
+            color: #fff !important;
+
+        }
+
+        .p2 {
+            font-size: 8px;
+            color: rgb(0, 0, 0);
+            font-weight: bolder;
+        }
+
+        canvas {
+            height: 300px !important;
+            width: 500px !important;
+        }
+
+
+
+
+        .progressDiv {
+            width: 84%;
+            background: #fcfcfc;
+            height: 325px;
+            border: 1px solid #ccc;
+            position: relative;
+            left: 7%;
+            top: 100px;
+            display: inline-block;
+            border-radius: 2px;
+            box-shadow: 0px 1px 1px 1px #ccc;
+        }
+
+        .statChartHolder {
+            width: 35%;
+            height: 90%;
+            position: relative;
+            border-right: 1px solid #ccc;
+            top: 15px;
+            display: inline-block;
+        }
+
+        .statRightHolder {
+            display: inline-block;
+            height: 90%;
+            width: 64%;
+            position: relative;
+            top: -32px;
+            margin: 0;
+        }
+
+        .statRightHolder ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .statRightHolder li {
+            border-bottom: 1px solid #ccc;
+            height: 85px;
+            width: 95%;
+            position: relative;
+            top: -25px;
+        }
+
+        .statRightHolder h3 {
+            display: inline-block;
+            margin-right: 15px;
+            color: #B6B5B5;
+            font-weight: 300;
+            font-size: 38px;
+        }
+
+        .statRightHolder span {
+            display: inline-block;
+            color: #B6B5B5;
+            font-size: 21px;
+            font-weight: 300;
+        }
+
+        .statsLeft {
+            list-style: none;
+            display: inline-block;
+            width: 45%;
+        }
+
+        .statsLeft li {
+            width: 100%;
+            height: 14px;
+            border: none;
+            top: 5px;
+            margin-bottom: 25px;
+        }
+
+        .statsLeft h3 {
+            font-size: 17px;
+            display: inline-block;
+        }
+
+        .statsLeft span {
+            font-size: 17px;
+            display: inline-block;
+        }
+
+        .statsRight {
+            width: 45%;
+            display: inline-block;
+            position: absolute;
+        }
+
+        .statsRight li {
+            width: 100%;
+            height: 14px;
+            border: none;
+            top: 5px;
+            margin-bottom: 25px;
+        }
+
+        .statsRight h3 {
+            font-size: 17px;
+            display: inline-block;
+        }
+
+        .statsRight span {
+            font-size: 17px;
+            display: inline-block;
+        }
+
+        /* Pie Chart */
+        .progress-pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #E5E5E5;
+            position: relative;
+        }
+
+        .progress-pie-chart.gt-50 {
+            background-color: #81CE97;
+        }
+
+        .ppc-progress {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+            width: 200px;
+            height: 200px;
+            clip: rect(0, 200px, 200px, 100px);
+        }
+
+        .ppc-progress .ppc-progress-fill {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            left: calc(50% - 100px);
+            top: calc(50% - 100px);
+            width: 200px;
+            height: 200px;
+            clip: rect(0, 100px, 200px, 0);
+            background: #81CE97;
+            transform: rotate(60deg);
+        }
+
+        .gt-50 .ppc-progress {
+            clip: rect(0, 100px, 200px, 0);
+        }
+
+        .gt-50 .ppc-progress .ppc-progress-fill {
+            clip: rect(0, 200px, 200px, 100px);
+            background: #E5E5E5;
+        }
+
+        .ppc-percents {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            left: calc(50% - 173.91304px/2);
+            top: calc(50% - 173.91304px/2);
+            width: 173.91304px;
+            height: 173.91304px;
+            background: #fff;
+            text-align: center;
+            display: table;
+        }
+
+        .ppc-percents span {
+            display: block;
+            font-size: 2.6em;
+            font-weight: bold;
+            color: #81CE97;
+        }
+
+        .pcc-percents-wrapper {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        /* 
+        .progress-pie-chart {
+            margin: 50px auto 0;
+        } */
+
+        .myCol3 {
+            padding: 10px 10px 10px 10px;
+        }
+
+        .button2 {
+            justify-content: center;
+            width: 100% !important;
+            background-color: #4935FF !important;
+            font-size: 10px;
+        }
+
+        .myCol3div1 {
+            background-color: #fcfafa;
+            ;
+            padding: 31px 36px 10px 36px;
+            border-radius: 5px;
+        }
+
+        .myCol3p5 {
+            text-align: center !important;
+            color: blue;
+            font-size: 12px;
+            font-weight: bold;
+
+        }
+
+        button {
+            background-color: #4935FF !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+
+            <a href="">
+                <div class="image-text">
+                    <!-- <span class="image"> -->
+                    <img src="./WhatsApp Image 2024-01-14 at 1.04.38 AM.jpeg" height="20" width="20">
+                    <!-- </span> -->
+                </div>
+            </a>
+
+
+
+            <a href=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                    <path
+                        d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z">
+                    </path>
+                </svg></a>
+
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                    <path
+                        d="M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z">
+                    </path>
+                </svg></a>
+
+
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                    <path
+                        d="M7.122.392a1.75 1.75 0 0 1 1.756 0l5.003 2.902c.83.481.83 1.68 0 2.162L8.878 8.358a1.75 1.75 0 0 1-1.756 0L2.119 5.456a1.251 1.251 0 0 1 0-2.162ZM8.125 1.69a.248.248 0 0 0-.25 0l-4.63 2.685 4.63 2.685a.248.248 0 0 0 .25 0l4.63-2.685ZM1.601 7.789a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0L1.874 8.814A.75.75 0 0 1 1.6 7.789Zm0 3.5a.75.75 0 0 1 1.025-.273l5.249 3.044a.248.248 0 0 0 .25 0l5.249-3.044a.75.75 0 0 1 .752 1.298l-5.248 3.044a1.75 1.75 0 0 1-1.756 0l-5.248-3.044a.75.75 0 0 1-.273-1.025Z">
+                    </path>
+                </svg></a>
+
+
+
+            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                    <path
+                        d="M4.75 7a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5ZM5 4.75A.75.75 0 0 1 5.75 4h5.5a.75.75 0 0 1 0 1.5h-5.5A.75.75 0 0 1 5 4.75ZM6.75 10a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5Z">
+                    </path>
+                    <path
+                        d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Z">
+                    </path>
+                </svg></a>
+            <!-- Add more menu items as needed -->
+
+
+            <a href="#s"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                    <path
+                        d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z">
+                    </path>
+                </svg></a>
+        </nav>
+
+        <!-- Main content -->
+        <div id="main">
+            <div class="row">
+                <!-- Content for both mobile and desktop view -->
+                <div class="col-md-3 col-12 FirstCol">
+
+
+                    <div class="row">
+                        <div class="col-4 col-md-4 imgcol">
+                            <img class="img2" src="./360_F_200902415_G4eZ9Ok3Ypd4SZZKjc8nqJyFVp1eOD6V.jpg" alt="">
+                        </div>
+                        <div class="col-8 col-md-8 idCol">
+                            <h5 class="h51" class="card-title">Hi Mike,</h5>
+                            <p class="card-text p1">welcome back.</p>
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-2">
+                                <img src="./WhatsApp Image 2024-01-06 at 12.40.54 PM.jpeg"
+                                    class="img-fluid rounded-start cardImg" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="h51" class="card-title">Hi, Mike</h5>
+                                    <p class="card-text p1">welcome back.</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <br>
+
+
+                    <div class="FirstCol1">
+                        <p class="p11">Today</p>
+                        <h3 class="h31">$19,892</h3>
+                        <p class="p12">Account Balance</p><br>
+
+                        <h5 class="h5m">$4,000</h5>
+                        <p class="p12">Year-to-Date Contributions</p><br>
+
+                        <h5 class="h5m">$1,892</h5>
+                        <p class="p12">Total Invest</p>
+
+                        <button class="btn btn-primary button1">I want to<svg xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 16 16" width="16" height="16">
+                                <path
+                                    d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z">
+                                </path>
+                            </svg>
+                        </button><br><br><br>
+                        <h5 class="h52">Recent Transactions</h5>
+
+                        <p class="p122">2020-08-07</p>
+                        <p class="p2">Withdrawal Transfer to Bank-xxx11</p>
+                        <hr>
+                        <br>
+                        <p class="p122">2020-08-07</p>
+                        <p class="p2">Withdrawal Transfer to Bank-xxx11</p>
+                        <hr><br>
+                        <p class="p122">2020-08-07</p>
+                        <p class="p2">Withdrawal Transfer to Bank-xxx11</p>
+                        <hr>
+
+
+
+                    </div>
+
+
+
+                </div>
+                <div class="col-md-6 col-12 secondCol">
+                    <p class="sp1">Retirement Income</p>
+                    <h2 class="sh1">Starting Year 2056</h2><br>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h3 class="sh2">$300,000</h3>
+                            <p class="sp2">My Goal</p>
+                            <hr style="color: #4935FF;">
+                        </div>
+                        <div class="col-md-4">
+                            <h3 class="sh2">59%</h3>
+                            <p class="sp2">Goal Achieved</p>
+                            <hr style="color: #4935FF;">
+                        </div>
+                        <div class="col-md-4">
+                            <h3 class="sh2">$300</h3>
+                            <p class="sp2">Est, Monthly Income</p>
+                            <hr style="color: #4935FF; height: 10px!important;">
+                        </div>
+                    </div>
+                    <br>
+
+                    <p class="sp3">Contributions Overtime</p>
+                    <div class="row">
+                        <div class="col-md-4 sb1">
+                            <button class="b1"></button>Employer:<span> K 73,5300</span>
+                        </div>
+                        <div class="col-md-4 sb1">
+                            <button class="b2"></button>Employee:<span> K 73,5300</span>
+                        </div>
+                        <div class="col-md-4 sb1">
+                            <button class="b3"></button>Total interest:<span> K 73,5300</span>
+                        </div>
+                    </div><br>
+
+                    <canvas id="myChart" width="40" height="40"></canvas><br><br>
+
+                    <h3 class="sh3">How do I compare to my peers?</h3>
+                    <p class="sp4">These numbers represent current goal achivement</p><br>
+
+                    <div class="row">
+                        <div class=" col-12 col-md-4">
+                            <h6 class="sh4">Age: <span style="font-weight:bold;">Under 30 <svg
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                                        <path
+                                            d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z">
+                                        </path>
+                                    </svg></span>
+                            </h6>
+                            <hr>
+                            <h6 class="sh4">Salary: <span>K 20 - K 30 <svg xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 16 16" width="16" height="16">
+                                        <path
+                                            d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z">
+                                        </path>
+                                    </svg></span>
+                            </h6>
+                            <hr>
+                            <h6 class="sh4">Gender: <span>Male <svg xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 16 16" width="16" height="16">
+                                        <path
+                                            d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z">
+                                        </path>
+                                    </svg></span>
+                            </h6>
+                            <hr>
+                        </div>
+                        <div class="col-12 col-md-8">
+
+                            <div class="row justify-content-center">
+                                <div class="col-md-4">
+                                    <div class="progress-pie-chart" data-percent="67"><!--Pie Chart -->
+                                        <div class="ppc-progress">
+                                            <div class="ppc-progress-fill"></div>
+                                        </div>
+                                        <div class="ppc-percents">
+                                            <div class="pcc-percents-wrapper">
+                                                <span>23%</span>
+                                            </div>
+                                        </div>
+                                    </div><!--End Chart -->
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="progress-pie-chart" data-percent="67"><!--Pie Chart -->
+                                        <div class="ppc-progress">
+                                            <div class="ppc-progress-fill"></div>
+                                        </div>
+                                        <div class="ppc-percents">
+                                            <div class="pcc-percents-wrapper">
+                                                <span>23%</span>
+                                            </div>
+                                        </div>
+                                    </div><!--End Chart -->
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="progress-pie-chart" data-percent="67"><!--Pie Chart -->
+                                        <div class="ppc-progress">
+                                            <div class="ppc-progress-fill"></div>
+                                        </div>
+                                        <div class="ppc-percents">
+                                            <div class="pcc-percents-wrapper">
+                                                <span>23%</span>
+                                            </div>
+                                        </div>
+                                    </div><!--End Chart -->
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-md-3 col-12 myCol3">
+                    <div class="myCol3div1">
+                        <h3 class="th1">Retirement Strategy</h3><br>
+                        <p class="tp1" style="font-size: 15px;">Employee Contribution<br><br>
+                            <input type="range"><span class="ts1"> 12%</span>
+                        </p>
+                        <p class="tp1" style="font-size: 15px;">Retirement Age</p>
+                        <input class="ti1" type="range"><span class="ts1"> 65</span>
+                        <hr>
+
+
+                        <p class="tp2" style="font-size: small;">Employer Contribution<span class="ts3"> 8.4%</span>
+                        </p>
+                        <p class="tp2" style="font-size: small;">Interest Rate<span class="ts4"> 5%</span> </p>
+                        <button class="btn btn-primary button2">Update
+                        </button><br><br>
+                        <p class="myCol3p5">View Help Docs ></p>
+
+
+
+                    </div>
+                    <br>
+                    <div class="pqr" style="border-left: 1px solid blue; padding-left: 30px;">
+                        <p class="tp3">Are you Considering a</p>
+                        <p style="font-weight: bold; font-size: 14px;">Housing Advance?</p>
+
+                        <p style="color: grey; font-size: 14px;">Limited time reduced interest</p>
+                        <p class="tp4" style="color: blue;">Learn More ></p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        // Sample data for the stacked bar chart
+        var data = {
+            labels: ['20', '', '25', '', '30', '', '35', '', '40', '', '60', '', '65'],
+            datasets: [
+                {
+                    label: 'Dataset 1',
+                    backgroundColor: '#0800A3',
+                    data: [10, 15, 20, 25, 30, 40, 51, 60, 70, 79, 85, 95, 110],
+                    barThickness: 15
+                },
+                {
+                    label: 'Dataset 2',
+                    backgroundColor: '#4935FF',
+                    data: [10, 13, 19, 25, 33, 41, 51, 61, 66, 70, 75, 80, 81],
+                    barThickness: 15
+                },
+                {
+                    label: 'Dataset 3',
+                    backgroundColor: '#85AFFF',
+                    data: [10, 11, 15, 20, 25, 30, 35, 40, 45, 50, 55, 65, 70],
+                    barThickness: 15
+                }
+
+            ]
+        };
+
+        // Chart configuration
+        var options = {
+            scales: {
+                x: {
+                    stacked: true,
+                    grid: {
+                        display: false // Disable x-axis grid lines
+                    }
+
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                        stepSize: 100 // Adjust the step size for the y-axis
+                    },
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.8,
+                    min: 0,
+                    max: 300
+                }
+
+            },
+            plugins: {
+                legend: {
+                    display: false // Hide the dataset labels at the top
+                }
+            }
+        };
+
+        // Get the canvas element
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        // Create a vertical stacked bar chart
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+        $(function () {
+            var $ppc = $('.progress-pie-chart'),
+                percent = parseInt($ppc.data('percent')),
+                deg = 360 * percent / 100;
+            // if (percent > 50) {
+            //     $ppc.addClass('gt-50');
+            // }
+            $('.ppc-progress-fill').css('transform', 'rotate(' + deg + 'deg)');
+            $('.ppc-percents span').html(percent + '%');
+        });
+
+
+    </script>
+
+</body>
+
+</html>

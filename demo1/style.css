@@ -1,0 +1,191 @@
+.h51 {
+    font-weight: bolder;
+}
+
+.p1 {
+    font-size: 10px;
+}
+
+.h31 {
+    font-weight: bolder;
+    font-size: 22px;
+}
+
+.p12 {
+    font-weight: bolder;
+    font-size: 9px;
+    color: rgb(167, 167, 167);
+}
+
+.button1 {
+    font-size: 10px;
+    color: white !important;
+}
+
+.h52 {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.h5m {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.p122 {
+    font-weight: bolder;
+    font-size: 9px;
+    color: rgb(167, 167, 167);
+    margin-bottom: 0;
+}
+
+.FirstCol {
+    background-color: #fcfafa;
+    border-radius: 5px;
+}
+
+.secondCol {
+    padding: 10px 80px 0px 80px;
+}
+
+.sp1 {
+    color: blue;
+    font-weight: bold;
+    font-size: 10px;
+    margin-bottom: 0;
+}
+
+.sh1 {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.sh2 {
+    font-size: 18px;
+    font-weight: bolder;
+    margin-bottom: 1px;
+}
+
+.sp2 {
+    font-size: 9px;
+    color: rgb(167, 167, 167);
+}
+
+.sp3 {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.sb1 {
+    font-size: 9px !important;
+    color: rgb(167, 167, 167);
+}
+
+.b1 {
+    height: 8px;
+    width: 5px;
+    border-radius: 5px;
+    border: 1px solid #0800A3;
+    background-color: #0800A3 !important;
+}
+
+.b2 {
+    height: 8px;
+    width: 5px;
+    border-radius: 5px;
+    border: 1px solid #4935FF;
+    background-color: #4935FF !important;
+}
+
+.b3 {
+    height: 8px;
+    width: 5px;
+    border-radius: 5px;
+    border: 1px solid #85AFFF;
+    background-color: #85AFFF !important;
+}
+
+.sb1>span {
+    font-weight: bold;
+    font-size: 8px;
+    color: black;
+}
+
+.sh3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.sp4 {
+    font-size: 11px;
+    color: rgb(167, 167, 167);
+}
+
+.sh4 {
+    font-weight: bolder;
+    font-size: 10px;
+}
+
+.th1 {
+    font-weight: bolder;
+    font-size: 14px;
+}
+
+.tp1 {
+    font-weight: bold !important;
+    font-size: 10px !important;
+}
+
+input[type="range"] {
+    width: 51%;
+    height: 4px;
+    background-color: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    color: indigo;
+}
+.ts1{
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.ts3{
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 37px;
+}
+.ts4{
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 86px;
+}
+.tp2{
+    font-size: 10px !important;
+    font-weight: bold;
+    
+}
+.tp3{
+    font-size: 14px;
+    font-weight: 100 !important;
+    margin-bottom: 1px;
+}
+.tp4{
+    
+    color: blue;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.img2{
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+}
+.imgcol{
+    padding-left: 20px;
+}
+
+.idCol{
+    padding: 8px 0px 0px 0px;
+}
